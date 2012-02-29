@@ -24,7 +24,7 @@ package org.jboss.osgi.deployment.deployer;
 
 import org.jboss.osgi.deployment.internal.NullFileDeployment;
 import org.jboss.osgi.deployment.internal.VirtualFileDeployment;
-import org.jboss.osgi.spi.util.BundleInfo;
+import org.jboss.osgi.spi.BundleInfo;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Version;
 

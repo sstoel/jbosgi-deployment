@@ -31,7 +31,7 @@ import java.util.Set;
 
 import org.jboss.logging.Logger;
 import org.jboss.osgi.deployment.internal.InterceptorWrapper;
-import org.jboss.osgi.spi.util.ConstantsHelper;
+import org.jboss.osgi.spi.ConstantsHelper;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;

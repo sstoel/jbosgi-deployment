@@ -33,8 +33,8 @@ import java.io.ObjectOutputStream;
 
 import org.jboss.osgi.deployment.deployer.Deployment;
 import org.jboss.osgi.deployment.deployer.DeploymentFactory;
-import org.jboss.osgi.spi.util.BundleInfo;
-import org.jboss.osgi.testing.OSGiManifestBuilder;
+import org.jboss.osgi.spi.BundleInfo;
+import org.jboss.osgi.spi.OSGiManifestBuilder;
 import org.jboss.osgi.testing.OSGiTestHelper;
 import org.jboss.osgi.vfs.VFSUtils;
 import org.jboss.osgi.vfs.VirtualFile;
