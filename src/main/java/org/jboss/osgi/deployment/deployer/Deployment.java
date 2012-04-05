@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-
 import org.jboss.osgi.spi.Attachments;
 import org.jboss.osgi.vfs.VirtualFile;
 
@@ -31,58 +30,57 @@ import org.jboss.osgi.vfs.VirtualFile;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public interface Deployment extends Attachments
-{
-   /**
-    * Get the root virtual file
-    */
-   VirtualFile getRoot();
+public interface Deployment extends Attachments {
+    /**
+     * Get the root virtual file
+     */
+    VirtualFile getRoot();
 
-   /**
-    * Get the bundle location
-    */
-   String getLocation();
+    /**
+     * Get the bundle location
+     */
+    String getLocation();
 
-   /**
-    * Get the bundle symbolic name
-    */
-   String getSymbolicName();
+    /**
+     * Get the bundle symbolic name
+     */
+    String getSymbolicName();
 
-   /**
-    * Get the bundle version
-    *
-    * Consider making Version serializable
-    * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1744
-    */
-   String getVersion();
+    /**
+     * Get the bundle version
+     *
+     * Consider making Version serializable
+     * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1744
+     */
+    String getVersion();
 
-   /**
-    * Get the start level associated with this deployment
-    */
-   Integer getStartLevel();
+    /**
+     * Get the start level associated with this deployment
+     */
+    Integer getStartLevel();
 
-   /**
-    * Set the start level associated with this deployment
-    */
-   void setStartLevel(Integer startLevel);
+    /**
+     * Set the start level associated with this deployment
+     */
+    void setStartLevel(Integer startLevel);
 
-   /**
-    * Get the autostart flag associated with this deployment
-    */
-   boolean isAutoStart();
+    /**
+     * Get the autostart flag associated with this deployment
+     */
+    boolean isAutoStart();
 
-   /**
-    * Set the autostart flag associated with this deployment
-    */
-   void setAutoStart(boolean autoStart);
+    /**
+     * Set the autostart flag associated with this deployment
+     */
+    void setAutoStart(boolean autoStart);
 
-   /**
-    * Get the update flag associated with this deployment
-    */
-   boolean isBundleUpdate();
+    /**
+     * Get the update flag associated with this deployment
+     */
+    boolean isBundleUpdate();
 
-   /**
-    * Set the update flag associated with this deployment
-    */
-   void setBundleUpdate(boolean update);
+    /**
+     * Set the update flag associated with this deployment
+     */
+    void setBundleUpdate(boolean update);
 }

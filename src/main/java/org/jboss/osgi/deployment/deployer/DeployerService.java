@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
@@ -31,25 +30,24 @@ import org.osgi.framework.BundleException;
  * @author thomas.diesler@jboss.com
  * @since 23-Jan-2009
  */
-public interface DeployerService
-{
-   /**
-    * Deploy a bundle
-    */
-   Bundle deploy(Deployment bundleDep) throws BundleException;
+public interface DeployerService {
+    /**
+     * Deploy a bundle
+     */
+    Bundle deploy(Deployment bundleDep) throws BundleException;
 
-   /**
-    * Deploy an array of bundles
-    */
-   void deploy(Deployment[] bundleDeps) throws BundleException;
+    /**
+     * Deploy an array of bundles
+     */
+    void deploy(Deployment[] bundleDeps) throws BundleException;
 
-   /**
-    * Undeploy a bundle
-    */
-   Bundle undeploy(Deployment bundleDep) throws BundleException;
+    /**
+     * Undeploy a bundle
+     */
+    Bundle undeploy(Deployment bundleDep) throws BundleException;
 
-   /**
-    * Undeploy an array of bundles
-    */
-   void undeploy(Deployment[] bundleDeps) throws BundleException;
+    /**
+     * Undeploy an array of bundles
+     */
+    void undeploy(Deployment[] bundleDeps) throws BundleException;
 }

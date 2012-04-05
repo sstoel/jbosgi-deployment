@@ -21,6 +21,7 @@
  */
 package org.jboss.osgi.deployment.internal;
 
+import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,71 +36,60 @@ import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorException;
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public class InterceptorWrapper implements LifecycleInterceptor  
-{
-   private LifecycleInterceptor delegate;
+public class InterceptorWrapper implements LifecycleInterceptor {
+    private LifecycleInterceptor delegate;
 
-   public InterceptorWrapper(LifecycleInterceptor delegate)
-   {
-      if (delegate == null)
-         throw new IllegalArgumentException("Null interceptor");
-      
-      this.delegate = delegate;
-   }
+    public InterceptorWrapper(LifecycleInterceptor delegate) {
+        if (delegate == null)
+            throw MESSAGES.illegalArgumentNull("delegate");
 
-   public Set<Class<?>> getInput()
-   {
-      return delegate.getInput();
-   }
+        this.delegate = delegate;
+    }
 
-   public Set<Class<?>> getOutput()
-   {
-      return delegate.getOutput();
-   }
+    public Set<Class<?>> getInput() {
+        return delegate.getInput();
+    }
 
-   public int getRelativeOrder()
-   {
-      return delegate.getRelativeOrder();
-   }
+    public Set<Class<?>> getOutput() {
+        return delegate.getOutput();
+    }
 
-   public void invoke(int state, InvocationContext context) throws LifecycleInterceptorException
-   {
-      delegate.invoke(state, context);
-   }
+    public int getRelativeOrder() {
+        return delegate.getRelativeOrder();
+    }
 
-   public String toLongString()
-   {
-      String classToken = getLastNameToken(delegate.getClass());
-      
-      Set<String> input = null;
-      if (getInput() != null)
-      {
-         input = new HashSet<String>();
-         for(Class<?> aux : getInput())
-            input.add(getLastNameToken(aux));
-      }
-      
-      Set<String> output = null; 
-      if (getOutput() != null)
-      {
-         output = new HashSet<String>();
-         for(Class<?> aux : getOutput())
-            output.add(getLastNameToken(aux));
-      }
-      
-      return "[" + classToken + ",order=" + getRelativeOrder() + ",input=" + input + ",output=" + output + "]";
-   }
+    public void invoke(int state, InvocationContext context) throws LifecycleInterceptorException {
+        delegate.invoke(state, context);
+    }
 
-   @Override
-   public String toString()
-   {
-      String className = delegate.getClass().getName();
-      return "[" + className + ",order=" + getRelativeOrder() + "]";
-   }
+    public String toLongString() {
+        String classToken = getLastNameToken(delegate.getClass());
 
-   private String getLastNameToken(Class<?> clazz)
-   {
-      String token = clazz.getName();
-      return token.substring(token.lastIndexOf(".") + 1);
-   }
+        Set<String> input = null;
+        if (getInput() != null) {
+            input = new HashSet<String>();
+            for (Class<?> aux : getInput())
+                input.add(getLastNameToken(aux));
+        }
+
+        Set<String> output = null;
+        if (getOutput() != null) {
+            output = new HashSet<String>();
+            for (Class<?> aux : getOutput())
+                output.add(getLastNameToken(aux));
+        }
+
+        return "[" + classToken + ",order=" + getRelativeOrder() + ",input=" + input + ",output=" + output + "]";
+    }
+
+    @Override
+    public String toString() {
+        String className = delegate.getClass().getName();
+        return "[" + className + ",order=" + getRelativeOrder() + "]";
+    }
+
+    private String getLastNameToken(Class<?> clazz) {
+        String token = clazz.getName();
+        return token.substring(token.lastIndexOf(".") + 1);
+    }
 }

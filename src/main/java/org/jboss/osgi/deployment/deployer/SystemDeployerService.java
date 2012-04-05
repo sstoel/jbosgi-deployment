@@ -21,7 +21,9 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-import org.jboss.logging.Logger;
+import static org.jboss.osgi.deployment.internal.DeploymentLogger.LOGGER;
+import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -34,118 +36,98 @@ import org.osgi.service.startlevel.StartLevel;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public class SystemDeployerService implements DeployerService
-{
-   // Provide logging
-   private static final Logger log = Logger.getLogger(SystemDeployerService.class);
+public class SystemDeployerService implements DeployerService {
+    private final BundleContext context;
+    private final StartLevel startLevel;
 
-   private final BundleContext context;
-   private final StartLevel startLevel;
+    public SystemDeployerService(BundleContext context) {
+        if (context == null)
+            throw MESSAGES.illegalArgumentNull("context");
 
-   public SystemDeployerService(BundleContext context)
-   {
-      if (context == null)
-         throw new IllegalArgumentException("Null context");
+        this.context = context;
 
-      this.context = context;
+        ServiceReference sref = context.getServiceReference(StartLevel.class.getName());
+        this.startLevel = sref != null ? (StartLevel) context.getService(sref) : null;
+    }
 
-      ServiceReference sref = context.getServiceReference(StartLevel.class.getName());
-      this.startLevel = sref != null ? (StartLevel)context.getService(sref) : null;
-   }
+    @Override
+    public Bundle deploy(Deployment dep) throws BundleException {
+        Bundle bundle = deployInternal(dep);
+        startInternal(dep);
+        return bundle;
+    }
 
-   @Override
-   public Bundle deploy(Deployment dep) throws BundleException
-   {
-      Bundle bundle = deployInternal(dep);
-      startInternal(dep);
-      return bundle;
-   }
+    @Override
+    public Bundle undeploy(Deployment dep) throws BundleException {
+        return undeployInternal(dep);
+    }
 
-   @Override
-   public Bundle undeploy(Deployment dep) throws BundleException
-   {
-      return undeployInternal(dep);
-   }
+    @Override
+    public void deploy(Deployment[] depArr) throws BundleException {
+        // Install bundle deployments
+        for (Deployment dep : depArr)
+            deployInternal(dep);
 
-   @Override
-   public void deploy(Deployment[] depArr) throws BundleException
-   {
-      // Install bundle deployments
-      for (Deployment dep : depArr)
-         deployInternal(dep);
+        // Start the installed bundles
+        for (Deployment dep : depArr)
+            startInternal(dep);
+    }
 
-      // Start the installed bundles
-      for (Deployment dep : depArr)
-         startInternal(dep);
-   }
+    @Override
+    public void undeploy(Deployment[] depArr) throws BundleException {
+        for (Deployment dep : depArr)
+            undeployInternal(dep);
+    }
 
-   @Override
-   public void undeploy(Deployment[] depArr) throws BundleException
-   {
-      for (Deployment dep : depArr)
-         undeployInternal(dep);
-   }
+    private Bundle deployInternal(Deployment dep) throws BundleException {
+        LOGGER.debugf("Deploy: %s", dep);
+        Bundle bundle = installBundle(dep);
+        dep.addAttachment(Bundle.class, bundle);
 
-   private Bundle deployInternal(Deployment dep) throws BundleException
-   {
-      log.debugf("Deploy: %s", dep);
-      Bundle bundle = installBundle(dep);
-      dep.addAttachment(Bundle.class, bundle);
+        Integer level = dep.getStartLevel();
+        if (startLevel != null && level != null && level > 0)
+            startLevel.setBundleStartLevel(bundle, level);
 
-      Integer level = dep.getStartLevel();
-      if (startLevel != null && level != null && level > 0)
-         startLevel.setBundleStartLevel(bundle, level);
+        return bundle;
+    }
 
-      return bundle;
-   }
+    private void startInternal(Deployment dep) throws BundleException {
+        Bundle bundle = dep.getAttachment(Bundle.class);
+        if (bundle != null && dep.isAutoStart()) {
+            LOGGER.debugf("Start: %s", bundle);
 
-   private void startInternal(Deployment dep) throws BundleException
-   {
-      Bundle bundle = dep.getAttachment(Bundle.class);
-      if (bundle != null && dep.isAutoStart())
-      {
-         log.debugf("Start: %s", bundle);
+            // Added support for Bundle.START_ACTIVATION_POLICY on start
+            // http://issues.apache.org/jira/browse/FELIX-1317
+            // bundle.start(Bundle.START_ACTIVATION_POLICY);
 
-         // Added support for Bundle.START_ACTIVATION_POLICY on start
-         // http://issues.apache.org/jira/browse/FELIX-1317
-         // bundle.start(Bundle.START_ACTIVATION_POLICY);
+            bundle.start();
+        }
+    }
 
-         bundle.start();
-      }
-   }
+    private Bundle undeployInternal(Deployment dep) {
+        LOGGER.debugf("Undeploy: %s", dep);
+        Bundle bundle = dep.getAttachment(Bundle.class);
+        if (bundle == null) {
+            LOGGER.warnCannotObtainBundleForDeployment(dep);
+            return null;
+        }
 
-   private Bundle undeployInternal(Deployment dep)
-   {
-      log.debugf("Undeploy: %s", dep);
-      Bundle bundle = dep.getAttachment(Bundle.class);
-      if (bundle == null)
-      {
-         log.warnf("Cannot obtain bundle for: %s", dep);
-         return null;
-      }
+        try {
+            if (bundle.getState() != Bundle.UNINSTALLED) {
+                LOGGER.debugf("Uninstall: %s", bundle);
+                uninstallBundle(dep, bundle);
+            }
+        } catch (Throwable ex) {
+            LOGGER.warnCannotUninstallBundleForDeployment(ex, dep);
+        }
+        return bundle;
+    }
 
-      try
-      {
-         if (bundle.getState() != Bundle.UNINSTALLED)
-         {
-            log.debugf("Uninstall: %s", bundle);
-            uninstallBundle(dep, bundle);
-         }
-      }
-      catch (Throwable ex)
-      {
-         log.warnf(ex, "Cannot uninstall: %s", dep);
-      }
-      return bundle;
-   }
+    protected Bundle installBundle(Deployment dep) throws BundleException {
+        return context.installBundle(dep.getLocation());
+    }
 
-   protected Bundle installBundle(Deployment dep) throws BundleException
-   {
-      return context.installBundle(dep.getLocation());
-   }
-
-   protected void uninstallBundle(Deployment dep, Bundle bundle) throws BundleException
-   {
-      bundle.uninstall();
-   }
+    protected void uninstallBundle(Deployment dep, Bundle bundle) throws BundleException {
+        bundle.uninstall();
+    }
 }

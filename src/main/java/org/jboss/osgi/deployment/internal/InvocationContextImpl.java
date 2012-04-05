@@ -21,6 +21,7 @@
  */
 package org.jboss.osgi.deployment.internal;
 
+import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
 
 import java.util.Collection;
 
@@ -36,90 +37,75 @@ import org.osgi.framework.BundleContext;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public class InvocationContextImpl implements InvocationContext
-{
-   private Attachments attachments;
-   private BundleContext systemContext;
-   private VirtualFile root;
-   private Bundle bundle;
-   
-   public InvocationContextImpl(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachments attachments)
-   {
-      if (systemContext == null)
-         throw new IllegalArgumentException("Null system context");
-      if (bundle == null)
-         throw new IllegalArgumentException("Null bundle");
-      if (attachments == null)
-         throw new IllegalArgumentException("Null attachments");
+public class InvocationContextImpl implements InvocationContext {
+    private Attachments attachments;
+    private BundleContext systemContext;
+    private VirtualFile root;
+    private Bundle bundle;
 
-      this.systemContext = systemContext;
-      this.root = root;
-      this.bundle = bundle;
-      this.attachments = attachments;
-   }
+    public InvocationContextImpl(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachments attachments) {
+        if (systemContext == null)
+            throw MESSAGES.illegalArgumentNull("context");
+        if (bundle == null)
+            throw MESSAGES.illegalArgumentNull("bundle");
+        if (attachments == null)
+            throw MESSAGES.illegalArgumentNull("attachments");
 
-   public BundleContext getSystemContext()
-   {
-      return systemContext;
-   }
+        this.systemContext = systemContext;
+        this.root = root;
+        this.bundle = bundle;
+        this.attachments = attachments;
+    }
 
-   public Bundle getBundle()
-   {
-      return bundle;
-   }
+    public BundleContext getSystemContext() {
+        return systemContext;
+    }
 
-   public VirtualFile getRoot()
-   {
-      return root;
-   }
+    public Bundle getBundle() {
+        return bundle;
+    }
 
-   public <T> T addAttachment(Class<T> clazz, T value)
-   {
-      return attachments.addAttachment(clazz, value);
-   }
+    public VirtualFile getRoot() {
+        return root;
+    }
 
-   public <T> T addAttachment(String name, T value, Class<T> clazz)
-   {
-      return attachments.addAttachment(name, value, clazz);
-   }
+    public <T> T addAttachment(Class<T> clazz, T value) {
+        return attachments.addAttachment(clazz, value);
+    }
 
-   public Object addAttachment(String name, Object value)
-   {
-      return attachments.addAttachment(name, value);
-   }
+    public <T> T addAttachment(String name, T value, Class<T> clazz) {
+        return attachments.addAttachment(name, value, clazz);
+    }
 
-   public <T> T getAttachment(String name, Class<T> clazz)
-   {
-      return attachments.getAttachment(name, clazz);
-   }
+    public Object addAttachment(String name, Object value) {
+        return attachments.addAttachment(name, value);
+    }
 
-   public <T> T getAttachment(Class<T> clazz)
-   {
-      return attachments.getAttachment(clazz);
-   }
+    public <T> T getAttachment(String name, Class<T> clazz) {
+        return attachments.getAttachment(name, clazz);
+    }
 
-   public Object getAttachment(String name)
-   {
-      return attachments.getAttachment(name);
-   }
+    public <T> T getAttachment(Class<T> clazz) {
+        return attachments.getAttachment(clazz);
+    }
 
-   public Collection<Key> getAttachmentKeys()
-   {
-      return attachments.getAttachmentKeys();
-   }
+    public Object getAttachment(String name) {
+        return attachments.getAttachment(name);
+    }
 
-   public <T> T removeAttachment(Class<T> clazz, String name)
-   {
-      return attachments.removeAttachment(clazz, name);
-   }
+    public Collection<Key> getAttachmentKeys() {
+        return attachments.getAttachmentKeys();
+    }
 
-   public <T> T removeAttachment(Class<T> clazz)
-   {
-      return attachments.removeAttachment(clazz);
-   }
+    public <T> T removeAttachment(Class<T> clazz, String name) {
+        return attachments.removeAttachment(clazz, name);
+    }
 
-   public Object removeAttachment(String name)
-   {
-      return attachments.removeAttachment(name);
-   }
+    public <T> T removeAttachment(Class<T> clazz) {
+        return attachments.removeAttachment(clazz);
+    }
+
+    public Object removeAttachment(String name) {
+        return attachments.removeAttachment(name);
+    }
 }

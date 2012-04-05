@@ -21,12 +21,13 @@
  */
 package org.jboss.osgi.deployment.internal;
 
+import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+
 import java.io.Serializable;
 
 import org.jboss.osgi.deployment.deployer.Deployment;
-import org.jboss.osgi.spi.util.AttachmentSupport;
+import org.jboss.osgi.spi.AttachmentSupport;
 import org.osgi.framework.Version;
-
 
 /**
  * An abstraction of a bundle deployment
@@ -34,110 +35,96 @@ import org.osgi.framework.Version;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public abstract class AbstractDeployment extends AttachmentSupport implements Deployment, Serializable
-{
-   private static final long serialVersionUID = -3918766495938169718L;
-   
-   private String location;
-   private String symbolicName;
-   private String version;
-   private Integer startLevel;
-   private boolean autoStart;
-   private boolean update;
+public abstract class AbstractDeployment extends AttachmentSupport implements Deployment, Serializable {
+    private static final long serialVersionUID = -3918766495938169718L;
 
-   public AbstractDeployment(String location, String symbolicName, Version version)
-   {
-      if (location == null)
-         throw new IllegalArgumentException("Null location");
-      if (version == null)
-         version = Version.emptyVersion;
+    private String location;
+    private String symbolicName;
+    private String version;
+    private Integer startLevel;
+    private boolean autoStart;
+    private boolean update;
 
-      // symbolicName can be null
-      
-      this.location = location;
-      this.symbolicName = symbolicName;
-      this.version = version.toString();
-   }
+    public AbstractDeployment(String location, String symbolicName, Version version) {
+        if (location == null)
+            throw MESSAGES.illegalArgumentNull("location");
+        if (version == null)
+            version = Version.emptyVersion;
 
-   @Override
-   public String getLocation()
-   {
-      return location;
-   }
+        // symbolicName can be null
 
-   @Override
-   public String getSymbolicName()
-   {
-      return symbolicName;
-   }
+        this.location = location;
+        this.symbolicName = symbolicName;
+        this.version = version.toString();
+    }
 
-   @Override
-   public String getVersion()
-   {
-      return version;
-   }
+    @Override
+    public String getLocation() {
+        return location;
+    }
 
-   @Override
-   public Integer getStartLevel()
-   {
-      return startLevel;
-   }
+    @Override
+    public String getSymbolicName() {
+        return symbolicName;
+    }
 
-   @Override
-   public void setStartLevel(Integer startLevel)
-   {
-      if (startLevel == null || startLevel < 1)
-         throw new IllegalArgumentException("Start level must be greater than one: " + startLevel);
+    @Override
+    public String getVersion() {
+        return version;
+    }
 
-      this.startLevel = startLevel;
-   }
+    @Override
+    public Integer getStartLevel() {
+        return startLevel;
+    }
 
-   @Override
-   public boolean isAutoStart()
-   {
-      return autoStart;
-   }
+    @Override
+    public void setStartLevel(Integer startLevel) {
+        if (startLevel == null || startLevel < 1)
+            throw MESSAGES.illegalArgumentStartLevel(startLevel);
 
-   @Override
-   public void setAutoStart(boolean autoStart)
-   {
-      this.autoStart = autoStart;
-   }
+        this.startLevel = startLevel;
+    }
 
-   @Override
-   public boolean isBundleUpdate()
-   {
-      return update;
-   }
+    @Override
+    public boolean isAutoStart() {
+        return autoStart;
+    }
 
-   @Override
-   public void setBundleUpdate(boolean update)
-   {
-      this.update = update;
-   }
+    @Override
+    public void setAutoStart(boolean autoStart) {
+        this.autoStart = autoStart;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (!(obj instanceof AbstractDeployment))
-         return false;
+    @Override
+    public boolean isBundleUpdate() {
+        return update;
+    }
 
-      AbstractDeployment other = (AbstractDeployment)obj;
-      boolean matchLocation = location.equals(other.location);
-      boolean matchName = symbolicName == other.symbolicName || symbolicName.equals(other.symbolicName);
-      boolean matchVersion = getVersion().equals(other.getVersion());
-      return matchLocation && matchName && matchVersion;
-   }
+    @Override
+    public void setBundleUpdate(boolean update) {
+        this.update = update;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return toString().hashCode();
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AbstractDeployment))
+            return false;
 
-   @Override
-   public String toString()
-   {
-      return "[" + symbolicName + ":" + version + ",location=" + location + "]";
-   }
+        AbstractDeployment other = (AbstractDeployment) obj;
+        boolean matchLocation = location.equals(other.location);
+        boolean matchName = symbolicName == other.symbolicName || symbolicName.equals(other.symbolicName);
+        boolean matchVersion = getVersion().equals(other.getVersion());
+        return matchLocation && matchName && matchVersion;
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "[" + symbolicName + ":" + version + ",location=" + location + "]";
+    }
 }

@@ -21,6 +21,7 @@
  */
 package org.jboss.osgi.deployment;
 
+import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
 
 import java.util.Properties;
 
@@ -37,21 +38,18 @@ import org.osgi.framework.BundleContext;
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public class DeploymentServicesActivator
-{
-   public void start(BundleContext context)
-   {
-      if (context == null)
-         throw new IllegalArgumentException("Null BundleContext");
+public class DeploymentServicesActivator {
+    public void start(BundleContext context) {
+        if (context == null)
+            throw MESSAGES.illegalArgumentNull("context");
 
-      // Register the SystemDeployerService
-      Properties props = new Properties();
-      props.put("provider", "system");
-      SystemDeployerService deployerService = new SystemDeployerService(context);
-      context.registerService(DeployerService.class.getName(), deployerService, props);
-   }
+        // Register the SystemDeployerService
+        Properties props = new Properties();
+        props.put("provider", "system");
+        SystemDeployerService deployerService = new SystemDeployerService(context);
+        context.registerService(DeployerService.class.getName(), deployerService, props);
+    }
 
-   public void stop(BundleContext context)
-   {
-   }
+    public void stop(BundleContext context) {
+    }
 }

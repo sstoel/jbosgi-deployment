@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,59 +30,53 @@ import java.util.Set;
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public abstract class AbstractLifecycleInterceptor implements LifecycleInterceptor 
-{
-   private Set<Class<?>> input;
-   private Set<Class<?>> output;
-   
-   /**
-    * Get default relative order
-    * @return 1000
-    */
-   public int getRelativeOrder()
-   {
-      return LifecycleInterceptor.RELATIVE_ORDER_DEFAULT;
-   }
+public abstract class AbstractLifecycleInterceptor implements LifecycleInterceptor {
+    private Set<Class<?>> input;
+    private Set<Class<?>> output;
 
-   /**
-    * Get the required set of inputs. 
-    * 
-    * @return null if there are no inputs required
-    */
-   public Set<Class<?>> getInput()
-   {
-      return input;
-   }
+    /**
+     * Get default relative order
+     * @return 1000
+     */
+    public int getRelativeOrder() {
+        return LifecycleInterceptor.RELATIVE_ORDER_DEFAULT;
+    }
 
-   /**
-    * Get the provided set of outputs. 
-    * 
-    * @return null if there are no outputs provided
-    */
-   public Set<Class<?>> getOutput()
-   {
-      return output;
-   }
+    /**
+     * Get the required set of inputs. 
+     * 
+     * @return null if there are no inputs required
+     */
+    public Set<Class<?>> getInput() {
+        return input;
+    }
 
-   /**
-    * Add an input requirement. 
-    */
-   public void addInput(Class<?> in)
-   {
-      if (input == null)
-         input = new HashSet<Class<?>>();
-      
-      input.add(in);
-   }
-   
-   /**
-    * Add an output capability. 
-    */
-   public void addOutput(Class<?> out)
-   {
-      if (output == null)
-         output = new HashSet<Class<?>>();
-      
-      output.add(out);
-   }
+    /**
+     * Get the provided set of outputs. 
+     * 
+     * @return null if there are no outputs provided
+     */
+    public Set<Class<?>> getOutput() {
+        return output;
+    }
+
+    /**
+     * Add an input requirement. 
+     */
+    public void addInput(Class<?> in) {
+        if (input == null)
+            input = new HashSet<Class<?>>();
+
+        input.add(in);
+    }
+
+    /**
+     * Add an output capability. 
+     */
+    public void addOutput(Class<?> out) {
+        if (output == null)
+            output = new HashSet<Class<?>>();
+
+        output.add(out);
+    }
 }

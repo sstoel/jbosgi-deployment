@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-
 import org.jboss.osgi.spi.Attachments;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Bundle;
@@ -33,20 +32,19 @@ import org.osgi.framework.BundleContext;
  * @author thomas.diesler@jboss.com
  * @since 24-Oct-2009
  */
-public interface InvocationContext extends Attachments
-{
-   /**
-    * Get the system bundle context
-    */
-   BundleContext getSystemContext();
-   
-   /**
-    * Get the root virtual file
-    */
-   VirtualFile getRoot();
+public interface InvocationContext extends Attachments {
+    /**
+     * Get the system bundle context
+     */
+    BundleContext getSystemContext();
 
-   /**
-    * Get the bundle
-    */
-   Bundle getBundle();
+    /**
+     * Get the root virtual file
+     */
+    VirtualFile getRoot();
+
+    /**
+     * Get the bundle
+     */
+    Bundle getBundle();
 }

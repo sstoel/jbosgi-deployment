@@ -24,25 +24,21 @@ package org.jboss.osgi.deployment.internal;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Version;
 
-
 /**
  * An abstraction of a bundle deployment
  *
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public class NullFileDeployment extends AbstractDeployment
-{
-   private static final long serialVersionUID = -3331145101532992381L;
-   
-   public NullFileDeployment(String location, String symbolicName, Version version)
-   {
-      super(location, symbolicName, version);
-   }
+public class NullFileDeployment extends AbstractDeployment {
+    private static final long serialVersionUID = -3331145101532992381L;
 
-   @Override
-   public VirtualFile getRoot()
-   {
-      return null;
-   }
+    public NullFileDeployment(String location, String symbolicName, Version version) {
+        super(location, symbolicName, version);
+    }
+
+    @Override
+    public VirtualFile getRoot() {
+        return null;
+    }
 }

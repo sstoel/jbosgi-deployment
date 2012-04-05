@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-
 import org.osgi.framework.Bundle;
 
 /**
@@ -33,14 +32,13 @@ import org.osgi.framework.Bundle;
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public interface LifecycleInterceptorService
-{
-   /**
-    * Invoke the registered set of interceptors for the given bundle state change.
-    *  
-    * @param state The future state of the bundle
-    * @param bundle The bundle that changes state
-    * @throws LifecycleInterceptorException if the invocation of an interceptor fails 
-    */
-   void handleStateChange(int state, Bundle bundle);
+public interface LifecycleInterceptorService {
+    /**
+     * Invoke the registered set of interceptors for the given bundle state change.
+     *  
+     * @param state The future state of the bundle
+     * @param bundle The bundle that changes state
+     * @throws LifecycleInterceptorException if the invocation of an interceptor fails 
+     */
+    void handleStateChange(int state, Bundle bundle);
 }

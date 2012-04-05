@@ -21,8 +21,6 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-
-
 /**
  * A runtime exception that may be thrown from a lifecycle interceptor.
  * 
@@ -30,15 +28,12 @@ package org.jboss.osgi.deployment.interceptor;
  * @since 15-Oct-2009
  */
 @SuppressWarnings("serial")
-public class LifecycleInterceptorException extends RuntimeException
-{
-   public LifecycleInterceptorException(String message)
-   {
-      super(message);
-   }
+public class LifecycleInterceptorException extends RuntimeException {
+    public LifecycleInterceptorException(String message) {
+        super(message);
+    }
 
-   public LifecycleInterceptorException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public LifecycleInterceptorException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

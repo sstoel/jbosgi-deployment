@@ -21,7 +21,6 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-
 import java.util.Set;
 
 /**
@@ -30,37 +29,36 @@ import java.util.Set;
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public interface LifecycleInterceptor
-{
-   /** The default relative order: 1000 */
-   public static final int RELATIVE_ORDER_DEFAULT = 1000;
+public interface LifecycleInterceptor {
+    /** The default relative order: 1000 */
+    public static final int RELATIVE_ORDER_DEFAULT = 1000;
 
-   /**
-    * Get the relative order of this interceptor
-    */
-   int getRelativeOrder();
+    /**
+     * Get the relative order of this interceptor
+     */
+    int getRelativeOrder();
 
-   /**
-    * Get the required set of inputs. 
-    * 
-    * @return null if there are no inputs required
-    */
-   Set<Class<?>> getInput();
-   
-   /**
-    * Get the provided set of outputs. 
-    * 
-    * @return null if there are no outputs provided
-    */
-   Set<Class<?>> getOutput();
-   
-   /**
-    * Called by the {@link LifecycleInterceptorService} when the
-    * given bundle is about to change to the given state
-    * 
-    * @param state The future state of the bundle
-    * @param context The interceptor context
-    * @throws LifecycleInterceptorException if the invocation of the interceptor fails 
-    */
-   void invoke(int state, InvocationContext context) throws LifecycleInterceptorException;
+    /**
+     * Get the required set of inputs. 
+     * 
+     * @return null if there are no inputs required
+     */
+    Set<Class<?>> getInput();
+
+    /**
+     * Get the provided set of outputs. 
+     * 
+     * @return null if there are no outputs provided
+     */
+    Set<Class<?>> getOutput();
+
+    /**
+     * Called by the {@link LifecycleInterceptorService} when the
+     * given bundle is about to change to the given state
+     * 
+     * @param state The future state of the bundle
+     * @param context The interceptor context
+     * @throws LifecycleInterceptorException if the invocation of the interceptor fails 
+     */
+    void invoke(int state, InvocationContext context) throws LifecycleInterceptorException;
 }
