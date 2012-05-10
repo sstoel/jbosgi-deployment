@@ -15,8 +15,8 @@
     <!-- Parent -->
     <parent>
         <groupId>org.jboss.osgi</groupId>
-        <artifactId>jboss-osgi-parent</artifactId>
-        <version>1.0.18</version>
+        <artifactId>jbosgi-parent</artifactId>
+        <version>1.0.22</version>
     </parent>
 
     <name>JBossOSGi Deployment</name>
