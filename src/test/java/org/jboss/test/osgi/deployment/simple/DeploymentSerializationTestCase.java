@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -44,8 +44,6 @@ package org.jboss.test.osgi.deployment.simple;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -66,45 +64,28 @@ import org.junit.Test;
 
 /**
  * Test Deployment serialization
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 12-Nov-2009
  */
 public class DeploymentSerializationTestCase
 {
-   @Test
-   public void testSerializeBundleInfo() throws Exception
-   {
-      BundleInfo info = getBundleInfo();
-      
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectOutputStream oos = new ObjectOutputStream(baos);
-      oos.writeObject(info);
-      baos.close();
-      
-      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-      ObjectInputStream ois = new ObjectInputStream(bais);
-      Object res = ois.readObject();
-      assertTrue("Instance of BundleInfo: " + res, res instanceof BundleInfo);
-      
-      assertEquals(info, res);
-   }
 
    @Test
    public void testSerializeDeployment() throws Exception
    {
       BundleInfo info = getBundleInfo();
       Deployment dep = DeploymentFactory.createDeployment(info);
-      
+
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ObjectOutputStream oos = new ObjectOutputStream(baos);
       oos.writeObject(dep);
       baos.close();
-      
+
       ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
       ObjectInputStream ois = new ObjectInputStream(bais);
       Deployment res = (Deployment)ois.readObject();
-      
+
       assertEquals(dep.getLocation(), res.getLocation());
       assertEquals(dep.getSymbolicName(), res.getSymbolicName());
       assertEquals(dep.getVersion(), res.getVersion());
@@ -127,7 +108,7 @@ public class DeploymentSerializationTestCase
             return builder.openStream();
          }
       });
-      
+
       BundleInfo info;
       VirtualFile rootFile = OSGiTestHelper.toVirtualFile(archive);
       try

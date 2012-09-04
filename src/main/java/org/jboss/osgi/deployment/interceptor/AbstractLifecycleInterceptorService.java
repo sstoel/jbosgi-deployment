@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -56,63 +56,56 @@ import org.jboss.osgi.deployment.internal.InterceptorWrapper;
 import org.jboss.osgi.spi.ConstantsHelper;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * A basic service that manages bundle lifecycle interceptors.
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
-public abstract class AbstractLifecycleInterceptorService implements LifecycleInterceptorService, ServiceListener {
-    // The system bundle context
-    private BundleContext context;
+public abstract class AbstractLifecycleInterceptorService implements LifecycleInterceptorService {
 
     // The interceptor chain
-    private List<LifecycleInterceptor> interceptorChain = new ArrayList<LifecycleInterceptor>();
+    private final List<LifecycleInterceptor> interceptorChain = new ArrayList<LifecycleInterceptor>();
+    private final ServiceTracker tracker;
 
     protected AbstractLifecycleInterceptorService(BundleContext context) {
         if (context == null)
             throw MESSAGES.illegalArgumentNull("context");
 
-        this.context = context;
+        tracker = new ServiceTracker(context, LifecycleInterceptor.class.getName(), null) {
 
-        String filter = "(" + Constants.OBJECTCLASS + "=" + LifecycleInterceptor.class.getName() + ")";
-        try {
-            context.addServiceListener(this, filter);
-        } catch (InvalidSyntaxException ex) {
-            // ignore
-        }
-    }
-
-    public BundleContext getSystemContext() {
-        return context;
-    }
-
-    @Override
-    public void serviceChanged(ServiceEvent event) {
-        ServiceReference reference = event.getServiceReference();
-        LifecycleInterceptor interceptor = (LifecycleInterceptor) context.getService(reference);
-        switch (event.getType()) {
-            case ServiceEvent.REGISTERED:
+            @Override
+            public Object addingService(ServiceReference sref) {
+                LifecycleInterceptor interceptor = (LifecycleInterceptor) super.addingService(sref);
                 addInterceptor(interceptor);
-                break;
-            case ServiceEvent.UNREGISTERING:
+                return interceptor;
+            }
+
+            @Override
+            public void removedService(ServiceReference sref, Object service) {
+                LifecycleInterceptor interceptor = (LifecycleInterceptor)service;
                 removeInterceptor(interceptor);
-                break;
-        }
+            }
+        };
+    }
+
+    public void open() {
+        tracker.open();
+    }
+
+    public void close() {
+        tracker.close();
     }
 
     /**
      * Add a LifecycleInterceptor to the service.
-     * 
-     * The interceptor is added according to its input requirements 
-     * and relative order. 
-     * 
+     *
+     * The interceptor is added according to its input requirements
+     * and relative order.
+     *
      * @param interceptor The interceptor
      */
     protected void addInterceptor(LifecycleInterceptor interceptor) {
@@ -128,7 +121,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
             List<LifecycleInterceptor> sortedList = new ArrayList<LifecycleInterceptor>();
 
-            // Add interceptors with no inputs first 
+            // Add interceptors with no inputs first
             Iterator<LifecycleInterceptor> itUnsorted = unsortedSet.iterator();
             while (itUnsorted.hasNext()) {
                 LifecycleInterceptor aux = itUnsorted.next();
@@ -146,7 +139,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
                     providedOutputs.addAll(auxOutput);
             }
 
-            // Add interceptors with sattisfied inputs 
+            // Add interceptors with sattisfied inputs
             itUnsorted = unsortedSet.iterator();
             while (itUnsorted.hasNext()) {
                 LifecycleInterceptor aux = itUnsorted.next();
@@ -209,7 +202,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
     /**
      * Remove an LifecycleInterceptor to the service.
-     * 
+     *
      * @param interceptor The interceptor
      */
     protected void removeInterceptor(LifecycleInterceptor interceptor) {
@@ -231,10 +224,10 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
     /**
      * Invoke the registered set of interceptors for the given bundle state change.
-     *  
+     *
      * @param state The future state of the bundle
      * @param bundle The bundle that changes state
-     * @throws LifecycleInterceptorException if the invocation of an interceptor fails 
+     * @throws LifecycleInterceptorException if the invocation of an interceptor fails
      */
     public void handleStateChange(int state, Bundle bundle) {
         synchronized (interceptorChain) {
@@ -252,7 +245,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
                 boolean doInvocation = true;
                 if (input != null) {
-                    // Check if all required input is available 
+                    // Check if all required input is available
                     for (Class<?> clazz : input) {
                         if (inv.getAttachment(clazz) == null) {
                             doInvocation = false;
@@ -273,7 +266,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
     }
 
     /**
-     * Get the InvocationContext for the given bundle. 
+     * Get the InvocationContext for the given bundle.
      */
     protected abstract InvocationContext getInvocationContext(Bundle bundle);
 }
