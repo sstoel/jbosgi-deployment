@@ -41,36 +41,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.osgi.deployment.internal;
+package org.jboss.osgi.deployment;
 
-import static org.jboss.logging.Logger.Level.WARN;
-
-import org.jboss.logging.BasicLogger;
-import org.jboss.logging.Cause;
-import org.jboss.logging.LogMessage;
-import org.jboss.logging.Logger;
-import org.jboss.logging.Message;
-import org.jboss.logging.MessageLogger;
-import org.jboss.osgi.deployment.deployer.Deployment;
+import org.jboss.logging.Messages;
+import org.jboss.logging.annotations.Cause;
+import org.jboss.logging.annotations.Message;
+import org.jboss.logging.annotations.MessageBundle;
+import org.osgi.framework.Bundle;
 
 /**
- * Logging Id ranges: 10400-10499
+ * Logging Id ranges: 10500-10599
  *
  * https://docs.jboss.org/author/display/JBOSGI/JBossOSGi+Logging
  *
  * @author Thomas.Diesler@jboss.com
  */
-@MessageLogger(projectCode = "JBOSGI")
-public interface DeploymentLogger extends BasicLogger {
+@MessageBundle(projectCode = "JBOSGI")
+public interface DeploymentMessages {
 
-    DeploymentLogger LOGGER = Logger.getMessageLogger(DeploymentLogger.class, "org.jboss.osgi.deployment");
+    DeploymentMessages MESSAGES = Messages.getBundle(DeploymentMessages.class);
 
-    @LogMessage(level = WARN)
-    @Message(id = 10400, value = "Cannot obtain bundle for deployment: %s")
-    void warnCannotObtainBundleForDeployment(Deployment dep);
+    @Message(id = 10500, value = "%s is null")
+    IllegalArgumentException illegalArgumentNull(String name);
 
-    @LogMessage(level = WARN)
-    @Message(id = 10401, value = "Cannot uninstall bundle for deployment: %s")
-    void warnCannotUninstallBundleForDeployment(@Cause Throwable cause, Deployment dep);
+    @Message(id = 10501, value = "Start level must be greater than one: %d")
+    IllegalArgumentException illegalArgumentStartLevel(int startLevel);
 
+    @Message(id = 10502, value = "Interceptor with no inputs should have been added already")
+    IllegalStateException illegalStateInterceptorWithNoInputsAdded();
+
+    @Message(id = 10503, value = "Cannot get invocation context for: %s")
+    IllegalStateException illegalStateCannotObtainInvocationContext(Bundle bundle);
+
+    @Message(id = 10504, value = "Cannot obtain root URL")
+    IllegalStateException illegalStateCannotObtainRootURL(@Cause Throwable cause);
+
+    @Message(id = 10505, value = "Cannot obtain root file")
+    IllegalStateException illegalStateCannotObtainRootFile(@Cause Throwable cause);
 }

@@ -42,8 +42,8 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-import static org.jboss.osgi.deployment.internal.DeploymentLogger.LOGGER;
-import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+import static org.jboss.osgi.deployment.DeploymentLogger.LOGGER;
+import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -67,7 +67,7 @@ public class SystemDeployerService implements DeployerService {
 
         this.context = context;
 
-        ServiceReference sref = context.getServiceReference(StartLevel.class.getName());
+        ServiceReference<?> sref = context.getServiceReference(StartLevel.class.getName());
         this.startLevel = sref != null ? (StartLevel) context.getService(sref) : null;
     }
 

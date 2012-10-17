@@ -42,8 +42,8 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-import static org.jboss.osgi.deployment.internal.DeploymentLogger.LOGGER;
-import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+import static org.jboss.osgi.deployment.DeploymentLogger.LOGGER;
+import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,23 +69,23 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
     // The interceptor chain
     private final List<LifecycleInterceptor> interceptorChain = new ArrayList<LifecycleInterceptor>();
-    private final ServiceTracker tracker;
+    private final ServiceTracker<LifecycleInterceptor, LifecycleInterceptor> tracker;
 
     protected AbstractLifecycleInterceptorService(BundleContext context) {
         if (context == null)
             throw MESSAGES.illegalArgumentNull("context");
 
-        tracker = new ServiceTracker(context, LifecycleInterceptor.class.getName(), null) {
+        tracker = new ServiceTracker<LifecycleInterceptor, LifecycleInterceptor>(context, LifecycleInterceptor.class, null) {
 
             @Override
-            public Object addingService(ServiceReference sref) {
+            public LifecycleInterceptor addingService(ServiceReference<LifecycleInterceptor> sref) {
                 LifecycleInterceptor interceptor = (LifecycleInterceptor) super.addingService(sref);
                 addInterceptor(interceptor);
                 return interceptor;
             }
 
             @Override
-            public void removedService(ServiceReference sref, Object service) {
+            public void removedService(ServiceReference<LifecycleInterceptor> sref, LifecycleInterceptor service) {
                 LifecycleInterceptor interceptor = (LifecycleInterceptor)service;
                 removeInterceptor(interceptor);
             }
