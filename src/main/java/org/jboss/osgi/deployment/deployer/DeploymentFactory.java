@@ -42,7 +42,7 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import org.jboss.osgi.deployment.internal.NullFileDeployment;
 import org.jboss.osgi.deployment.internal.VirtualFileDeployment;

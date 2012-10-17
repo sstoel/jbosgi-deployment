@@ -55,7 +55,9 @@ import org.jboss.osgi.deployment.interceptor.LifecycleInterceptor;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorException;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorService;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * Test the {@link LifecycleInterceptorService}
@@ -146,7 +148,7 @@ public class InterceptorOrderTestCase
    {
       protected MockLifecycleInterceptorService()
       {
-         super(new MockBundleContext());
+         super(Mockito.mock(BundleContext.class));
       }
 
       @Override

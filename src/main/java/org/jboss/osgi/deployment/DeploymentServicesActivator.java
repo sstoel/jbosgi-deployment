@@ -42,9 +42,10 @@
  */
 package org.jboss.osgi.deployment;
 
-import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
-import java.util.Properties;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.jboss.osgi.deployment.deployer.DeployerService;
 import org.jboss.osgi.deployment.deployer.SystemDeployerService;
@@ -65,7 +66,7 @@ public class DeploymentServicesActivator {
             throw MESSAGES.illegalArgumentNull("context");
 
         // Register the SystemDeployerService
-        Properties props = new Properties();
+        Dictionary<String, String> props = new Hashtable<String, String>();
         props.put("provider", "system");
         SystemDeployerService deployerService = new SystemDeployerService(context);
         context.registerService(DeployerService.class.getName(), deployerService, props);

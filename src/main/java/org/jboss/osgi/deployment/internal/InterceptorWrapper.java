@@ -42,7 +42,7 @@
  */
 package org.jboss.osgi.deployment.internal;
 
-import static org.jboss.osgi.deployment.internal.DeploymentMessages.MESSAGES;
+import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.util.HashSet;
 import java.util.Set;

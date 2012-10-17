@@ -44,6 +44,7 @@ package org.jboss.test.osgi.deployment.simple;
 
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -52,8 +53,8 @@ import java.io.ObjectOutputStream;
 
 import org.jboss.osgi.deployment.deployer.Deployment;
 import org.jboss.osgi.deployment.deployer.DeploymentFactory;
+import org.jboss.osgi.metadata.OSGiManifestBuilder;
 import org.jboss.osgi.spi.BundleInfo;
-import org.jboss.osgi.spi.OSGiManifestBuilder;
 import org.jboss.osgi.testing.OSGiTestHelper;
 import org.jboss.osgi.vfs.VFSUtils;
 import org.jboss.osgi.vfs.VirtualFile;
