@@ -69,13 +69,14 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
     // The interceptor chain
     private final List<LifecycleInterceptor> interceptorChain = new ArrayList<LifecycleInterceptor>();
-    private final ServiceTracker tracker;
+    private ServiceTracker tracker;
 
-    protected AbstractLifecycleInterceptorService(BundleContext context) {
-        if (context == null)
-            throw MESSAGES.illegalArgumentNull("context");
+    @Override
+    public void start(BundleContext systemContext) {
+        if (systemContext == null)
+            throw MESSAGES.illegalArgumentNull("systemContext");
 
-        tracker = new ServiceTracker(context, LifecycleInterceptor.class.getName(), null) {
+        tracker = new ServiceTracker(systemContext, LifecycleInterceptor.class.getName(), null) {
 
             @Override
             public Object addingService(ServiceReference sref) {
@@ -90,15 +91,16 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
                 removeInterceptor(interceptor);
             }
         };
-    }
-
-    public void open() {
         tracker.open();
     }
 
-    public void close() {
-        tracker.close();
+
+    @Override
+    public void stop() {
+        if (tracker != null)
+            tracker.close();
     }
+
 
     /**
      * Add a LifecycleInterceptor to the service.
@@ -229,6 +231,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
      * @param bundle The bundle that changes state
      * @throws LifecycleInterceptorException if the invocation of an interceptor fails
      */
+    @Override
     public void handleStateChange(int state, Bundle bundle) {
         synchronized (interceptorChain) {
             // Nothing to do

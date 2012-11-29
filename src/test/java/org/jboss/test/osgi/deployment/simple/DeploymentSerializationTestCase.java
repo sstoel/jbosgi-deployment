@@ -53,7 +53,7 @@ import java.io.ObjectOutputStream;
 import org.jboss.osgi.deployment.deployer.Deployment;
 import org.jboss.osgi.deployment.deployer.DeploymentFactory;
 import org.jboss.osgi.spi.BundleInfo;
-import org.jboss.osgi.spi.OSGiManifestBuilder;
+import org.jboss.osgi.metadata.OSGiManifestBuilder;
 import org.jboss.osgi.testing.OSGiTestHelper;
 import org.jboss.osgi.vfs.VFSUtils;
 import org.jboss.osgi.vfs.VirtualFile;
@@ -99,7 +99,8 @@ public class DeploymentSerializationTestCase
       final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "simple-bundle");
       archive.setManifest(new Asset()
       {
-         public InputStream openStream()
+         @Override
+        public InputStream openStream()
          {
             OSGiManifestBuilder builder = OSGiManifestBuilder.newInstance();
             builder.addBundleManifestVersion(2);
