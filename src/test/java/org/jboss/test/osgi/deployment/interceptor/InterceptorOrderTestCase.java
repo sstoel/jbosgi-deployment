@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -55,27 +55,26 @@ import org.jboss.osgi.deployment.interceptor.LifecycleInterceptor;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorException;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorService;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 /**
  * Test the {@link LifecycleInterceptorService}
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 19-Oct-2009
  */
 public class InterceptorOrderTestCase
 {
    static final int RELATIVE_ORDER = RELATIVE_ORDER_DEFAULT + 1000;
-   
+
    @Test
    public void testRelativeOrder()
    {
       LifecycleInterceptor rel0000 = new MockLifecycleInterceptor();
       LifecycleInterceptor rel2000 = new MockLifecycleInterceptor()
       {
-         public int getRelativeOrder()
+         @Override
+        public int getRelativeOrder()
          {
             return RELATIVE_ORDER;
          }
@@ -135,22 +134,18 @@ public class InterceptorOrderTestCase
       assertEquals(outA, chain.get(0));
       assertEquals(inA, chain.get(1));
    }
-   
+
    class MockLifecycleInterceptor extends AbstractLifecycleInterceptor
    {
-      public void invoke(int state, InvocationContext context) throws LifecycleInterceptorException
+      @Override
+    public void invoke(int state, InvocationContext context) throws LifecycleInterceptorException
       {
          // do nothing
       }
    }
-   
+
    class MockLifecycleInterceptorService extends AbstractLifecycleInterceptorService
    {
-      protected MockLifecycleInterceptorService()
-      {
-         super(Mockito.mock(BundleContext.class));
-      }
-
       @Override
       public void addInterceptor(LifecycleInterceptor interceptor)
       {

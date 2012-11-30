@@ -69,9 +69,10 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
     // The interceptor chain
     private final List<LifecycleInterceptor> interceptorChain = new ArrayList<LifecycleInterceptor>();
-    private final ServiceTracker<LifecycleInterceptor, LifecycleInterceptor> tracker;
+    private ServiceTracker<LifecycleInterceptor, LifecycleInterceptor> tracker;
 
-    protected AbstractLifecycleInterceptorService(BundleContext context) {
+    @Override
+    public void start(BundleContext context) {
         if (context == null)
             throw MESSAGES.illegalArgumentNull("context");
 
@@ -79,25 +80,24 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
             @Override
             public LifecycleInterceptor addingService(ServiceReference<LifecycleInterceptor> sref) {
-                LifecycleInterceptor interceptor = (LifecycleInterceptor) super.addingService(sref);
+                LifecycleInterceptor interceptor = super.addingService(sref);
                 addInterceptor(interceptor);
                 return interceptor;
             }
 
             @Override
             public void removedService(ServiceReference<LifecycleInterceptor> sref, LifecycleInterceptor service) {
-                LifecycleInterceptor interceptor = (LifecycleInterceptor)service;
+                LifecycleInterceptor interceptor = service;
                 removeInterceptor(interceptor);
             }
         };
     }
 
-    public void open() {
-        tracker.open();
-    }
-
-    public void close() {
-        tracker.close();
+    @Override
+    public void stop() {
+        if (tracker != null) {
+            tracker.close();
+        }
     }
 
     /**
@@ -229,6 +229,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
      * @param bundle The bundle that changes state
      * @throws LifecycleInterceptorException if the invocation of an interceptor fails
      */
+    @Override
     public void handleStateChange(int state, Bundle bundle) {
         synchronized (interceptorChain) {
             // Nothing to do
