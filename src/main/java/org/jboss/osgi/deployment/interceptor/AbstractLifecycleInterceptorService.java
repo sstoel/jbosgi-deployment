@@ -91,6 +91,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
                 removeInterceptor(interceptor);
             }
         };
+        tracker.open();
     }
 
     @Override
