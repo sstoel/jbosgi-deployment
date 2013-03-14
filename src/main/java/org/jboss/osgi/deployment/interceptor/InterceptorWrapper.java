@@ -40,16 +40,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.osgi.deployment.internal;
+package org.jboss.osgi.deployment.interceptor;
 
 import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jboss.osgi.deployment.interceptor.InvocationContext;
-import org.jboss.osgi.deployment.interceptor.LifecycleInterceptor;
-import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorException;
 
 /**
  * A wrapper around lifecycle interceptors.

@@ -40,13 +40,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.osgi.deployment.internal;
+package org.jboss.osgi.deployment.deployer;
 
 import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.io.Serializable;
 
-import org.jboss.osgi.deployment.deployer.Deployment;
 import org.jboss.osgi.spi.AttachmentSupport;
 import org.osgi.framework.Version;
 

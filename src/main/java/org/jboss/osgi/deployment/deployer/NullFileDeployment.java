@@ -40,14 +40,8 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.osgi.deployment.internal;
+package org.jboss.osgi.deployment.deployer;
 
-import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
-
-import java.io.IOException;
-import java.net.URL;
-
-import org.jboss.osgi.vfs.AbstractVFS;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Version;
 
@@ -57,34 +51,15 @@ import org.osgi.framework.Version;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public class VirtualFileDeployment extends AbstractDeployment {
+public class NullFileDeployment extends AbstractDeployment {
     private static final long serialVersionUID = -3331145101532992381L;
 
-    private transient VirtualFile rootFile;
-    private URL rootURL;
-
-    public VirtualFileDeployment(VirtualFile rootFile, String location, String symbolicName, Version version) {
+    public NullFileDeployment(String location, String symbolicName, Version version) {
         super(location, symbolicName, version);
-        if (rootFile == null)
-            throw MESSAGES.illegalArgumentNull("rootFile");
-
-        try {
-            this.rootFile = rootFile;
-            this.rootURL = rootFile.toURL();
-        } catch (IOException ex) {
-            throw MESSAGES.illegalStateCannotObtainRootURL(ex);
-        }
     }
 
     @Override
     public VirtualFile getRoot() {
-        if (rootFile == null) {
-            try {
-                rootFile = AbstractVFS.toVirtualFile(rootURL);
-            } catch (IOException ex) {
-                throw MESSAGES.illegalStateCannotObtainRootFile(ex);
-            }
-        }
-        return rootFile;
+        return null;
     }
 }

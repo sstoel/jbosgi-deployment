@@ -44,8 +44,6 @@ package org.jboss.osgi.deployment.deployer;
 
 import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
-import org.jboss.osgi.deployment.internal.NullFileDeployment;
-import org.jboss.osgi.deployment.internal.VirtualFileDeployment;
 import org.jboss.osgi.spi.BundleInfo;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Version;

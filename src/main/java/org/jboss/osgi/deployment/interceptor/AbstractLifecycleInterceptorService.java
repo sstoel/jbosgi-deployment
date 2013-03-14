@@ -52,7 +52,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jboss.osgi.deployment.internal.InterceptorWrapper;
 import org.jboss.osgi.spi.ConstantsHelper;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;

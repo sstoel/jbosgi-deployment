@@ -40,13 +40,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.osgi.deployment.internal;
+package org.jboss.osgi.deployment.interceptor;
 
 import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.util.Collection;
 
-import org.jboss.osgi.deployment.interceptor.InvocationContext;
 import org.jboss.osgi.spi.Attachments;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Bundle;
@@ -58,13 +57,13 @@ import org.osgi.framework.BundleContext;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public class InvocationContextImpl implements InvocationContext {
+public class AbstractInvocationContext implements InvocationContext {
     private Attachments attachments;
     private BundleContext systemContext;
     private VirtualFile root;
     private Bundle bundle;
 
-    public InvocationContextImpl(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachments attachments) {
+    public AbstractInvocationContext(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachments attachments) {
         if (systemContext == null)
             throw MESSAGES.illegalArgumentNull("context");
         if (bundle == null)
