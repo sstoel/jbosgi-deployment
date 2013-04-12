@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -44,13 +44,16 @@ package org.jboss.osgi.deployment.interceptor;
 
 import java.util.Set;
 
+import org.jboss.osgi.spi.AttachmentKey;
+
 /**
  * An OSGi bundle lifecycle interceptor.
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
 public interface LifecycleInterceptor {
+
     /** The default relative order: 1000 */
     public static final int RELATIVE_ORDER_DEFAULT = 1000;
 
@@ -60,26 +63,26 @@ public interface LifecycleInterceptor {
     int getRelativeOrder();
 
     /**
-     * Get the required set of inputs. 
-     * 
+     * Get the required set of inputs.
+     *
      * @return null if there are no inputs required
      */
-    Set<Class<?>> getInput();
+    Set<AttachmentKey<?>> getInput();
 
     /**
-     * Get the provided set of outputs. 
-     * 
+     * Get the provided set of outputs.
+     *
      * @return null if there are no outputs provided
      */
-    Set<Class<?>> getOutput();
+    Set<AttachmentKey<?>> getOutput();
 
     /**
      * Called by the {@link LifecycleInterceptorService} when the
      * given bundle is about to change to the given state
-     * 
+     *
      * @param state The future state of the bundle
      * @param context The interceptor context
-     * @throws LifecycleInterceptorException if the invocation of the interceptor fails 
+     * @throws LifecycleInterceptorException if the invocation of the interceptor fails
      */
     void invoke(int state, InvocationContext context) throws LifecycleInterceptorException;
 }

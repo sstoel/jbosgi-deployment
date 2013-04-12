@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jboss.osgi.spi.ConstantsHelper;
+import org.jboss.osgi.spi.AttachmentKey;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -132,9 +133,9 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
             }
 
             // Get the set of provided outputs
-            Set<Class<?>> providedOutputs = new HashSet<Class<?>>();
+            Set<AttachmentKey<?>> providedOutputs = new HashSet<AttachmentKey<?>>();
             for (LifecycleInterceptor aux : sortedList) {
-                Set<Class<?>> auxOutput = aux.getOutput();
+                Set<AttachmentKey<?>> auxOutput = aux.getOutput();
                 if (auxOutput != null)
                     providedOutputs.addAll(auxOutput);
             }
@@ -143,7 +144,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
             itUnsorted = unsortedSet.iterator();
             while (itUnsorted.hasNext()) {
                 LifecycleInterceptor aux = itUnsorted.next();
-                Set<Class<?>> input = aux.getInput();
+                Set<AttachmentKey<?>> input = aux.getInput();
                 if (input == null)
                     throw MESSAGES.illegalStateInterceptorWithNoInputsAdded();
 
@@ -175,9 +176,9 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
     }
 
     private void addWithRelativeOrder(List<LifecycleInterceptor> sortedList, LifecycleInterceptor interceptor) {
-        Set<Class<?>> providedOutputs = new HashSet<Class<?>>();
+        Set<AttachmentKey<?>> providedOutputs = new HashSet<AttachmentKey<?>>();
         int relOrder = interceptor.getRelativeOrder();
-        Set<Class<?>> input = interceptor.getInput();
+        Set<AttachmentKey<?>> input = interceptor.getInput();
 
         for (int i = 0; i < sortedList.size(); i++) {
             LifecycleInterceptor aux = sortedList.get(i);
@@ -191,7 +192,7 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
             }
 
             // Add the this interceptor output the list
-            Set<Class<?>> auxOutput = aux.getOutput();
+            Set<AttachmentKey<?>> auxOutput = aux.getOutput();
             if (auxOutput != null)
                 providedOutputs.addAll(auxOutput);
         }
@@ -242,13 +243,13 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
 
             // Call the interceptor chain
             for (LifecycleInterceptor aux : interceptorChain) {
-                Set<Class<?>> input = aux.getInput();
+                Set<AttachmentKey<?>> input = aux.getInput();
 
                 boolean doInvocation = true;
                 if (input != null) {
                     // Check if all required input is available
-                    for (Class<?> clazz : input) {
-                        if (inv.getAttachment(clazz) == null) {
+                    for (AttachmentKey<?> key : input) {
+                        if (inv.getAttachment(key) == null) {
                             doInvocation = false;
                             break;
                         }

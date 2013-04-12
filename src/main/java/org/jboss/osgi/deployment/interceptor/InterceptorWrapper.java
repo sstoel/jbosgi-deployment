@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -47,10 +47,12 @@ import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jboss.osgi.spi.AttachmentKey;
+
 
 /**
  * A wrapper around lifecycle interceptors.
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
@@ -64,11 +66,11 @@ public class InterceptorWrapper implements LifecycleInterceptor {
         this.delegate = delegate;
     }
 
-    public Set<Class<?>> getInput() {
+    public Set<AttachmentKey<?>> getInput() {
         return delegate.getInput();
     }
 
-    public Set<Class<?>> getOutput() {
+    public Set<AttachmentKey<?>> getOutput() {
         return delegate.getOutput();
     }
 
@@ -81,20 +83,20 @@ public class InterceptorWrapper implements LifecycleInterceptor {
     }
 
     public String toLongString() {
-        String classToken = getLastNameToken(delegate.getClass());
+        String classToken = delegate.getClass().getSimpleName();
 
         Set<String> input = null;
         if (getInput() != null) {
             input = new HashSet<String>();
-            for (Class<?> aux : getInput())
-                input.add(getLastNameToken(aux));
+            for (AttachmentKey<?> aux : getInput())
+                input.add(aux.getType().getSimpleName());
         }
 
         Set<String> output = null;
         if (getOutput() != null) {
             output = new HashSet<String>();
-            for (Class<?> aux : getOutput())
-                output.add(getLastNameToken(aux));
+            for (AttachmentKey<?> aux : getOutput())
+                output.add(aux.getType().getSimpleName());
         }
 
         return "[" + classToken + ",order=" + getRelativeOrder() + ",input=" + input + ",output=" + output + "]";
@@ -104,10 +106,5 @@ public class InterceptorWrapper implements LifecycleInterceptor {
     public String toString() {
         String className = delegate.getClass().getName();
         return "[" + className + ",order=" + getRelativeOrder() + "]";
-    }
-
-    private String getLastNameToken(Class<?> clazz) {
-        String token = clazz.getName();
-        return token.substring(token.lastIndexOf(".") + 1);
     }
 }

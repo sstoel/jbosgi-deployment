@@ -5,16 +5,16 @@
  * Copyright (C) 2010 - 2012 JBoss by Red Hat
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 2.1 of the 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
- * You should have received a copy of the GNU General Lesser Public 
+ *
+ * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-2.1.html>.
  * #L%
@@ -45,15 +45,17 @@ package org.jboss.osgi.deployment.interceptor;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jboss.osgi.spi.AttachmentKey;
+
 /**
  * An abstract implementation of a LifecycleInterceptor.
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @since 15-Oct-2009
  */
 public abstract class AbstractLifecycleInterceptor implements LifecycleInterceptor {
-    private Set<Class<?>> input;
-    private Set<Class<?>> output;
+    private Set<AttachmentKey<?>> input;
+    private Set<AttachmentKey<?>> output;
 
     /**
      * Get default relative order
@@ -64,39 +66,39 @@ public abstract class AbstractLifecycleInterceptor implements LifecycleIntercept
     }
 
     /**
-     * Get the required set of inputs. 
-     * 
+     * Get the required set of inputs.
+     *
      * @return null if there are no inputs required
      */
-    public Set<Class<?>> getInput() {
+    public Set<AttachmentKey<?>> getInput() {
         return input;
     }
 
     /**
-     * Get the provided set of outputs. 
-     * 
+     * Get the provided set of outputs.
+     *
      * @return null if there are no outputs provided
      */
-    public Set<Class<?>> getOutput() {
+    public Set<AttachmentKey<?>> getOutput() {
         return output;
     }
 
     /**
-     * Add an input requirement. 
+     * Add an input requirement.
      */
-    public void addInput(Class<?> in) {
+    public void addInput(AttachmentKey<?> in) {
         if (input == null)
-            input = new HashSet<Class<?>>();
+            input = new HashSet<AttachmentKey<?>>();
 
         input.add(in);
     }
 
     /**
-     * Add an output capability. 
+     * Add an output capability.
      */
-    public void addOutput(Class<?> out) {
+    public void addOutput(AttachmentKey<?> out) {
         if (output == null)
-            output = new HashSet<Class<?>>();
+            output = new HashSet<AttachmentKey<?>>();
 
         output.add(out);
     }

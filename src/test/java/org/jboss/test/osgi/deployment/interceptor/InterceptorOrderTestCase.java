@@ -54,6 +54,7 @@ import org.jboss.osgi.deployment.interceptor.InvocationContext;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptor;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorException;
 import org.jboss.osgi.deployment.interceptor.LifecycleInterceptorService;
+import org.jboss.osgi.spi.AttachmentKey;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 
@@ -107,12 +108,13 @@ public class InterceptorOrderTestCase
       class A
       {
       }
+      AttachmentKey<A> keyA = AttachmentKey.create(A.class);
 
       AbstractLifecycleInterceptor inA = new MockLifecycleInterceptor();
-      inA.addInput(A.class);
+      inA.addInput(keyA);
 
       AbstractLifecycleInterceptor outA = new MockLifecycleInterceptor();
-      outA.addOutput(A.class);
+      outA.addOutput(keyA);
 
       // Add ordered
       MockLifecycleInterceptorService service = new MockLifecycleInterceptorService();
