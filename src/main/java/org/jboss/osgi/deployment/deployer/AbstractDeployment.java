@@ -46,7 +46,7 @@ import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.io.Serializable;
 
-import org.jboss.osgi.spi.AttachmentsSupport;
+import org.jboss.osgi.spi.AttachableSupport;
 import org.osgi.framework.Version;
 
 /**
@@ -55,7 +55,7 @@ import org.osgi.framework.Version;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public abstract class AbstractDeployment extends AttachmentsSupport implements Deployment, Serializable {
+public abstract class AbstractDeployment extends AttachableSupport implements Deployment, Serializable {
     private static final long serialVersionUID = -3918766495938169718L;
 
     private String location;

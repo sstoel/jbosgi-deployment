@@ -42,7 +42,7 @@
  */
 package org.jboss.osgi.deployment.deployer;
 
-import org.jboss.osgi.spi.Attachments;
+import org.jboss.osgi.spi.Attachable;
 import org.jboss.osgi.vfs.VirtualFile;
 
 /**
@@ -51,7 +51,7 @@ import org.jboss.osgi.vfs.VirtualFile;
  * @author thomas.diesler@jboss.com
  * @since 27-May-2009
  */
-public interface Deployment extends Attachments {
+public interface Deployment extends Attachable {
     /**
      * Get the root virtual file
      */

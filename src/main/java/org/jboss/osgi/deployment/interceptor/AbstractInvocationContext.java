@@ -46,7 +46,7 @@ import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.util.Collection;
 
-import org.jboss.osgi.spi.Attachments;
+import org.jboss.osgi.spi.Attachable;
 import org.jboss.osgi.spi.AttachmentKey;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Bundle;
@@ -60,12 +60,12 @@ import org.osgi.framework.BundleContext;
  */
 public class AbstractInvocationContext implements InvocationContext {
 
-    private Attachments attachments;
+    private Attachable attachments;
     private BundleContext systemContext;
     private VirtualFile root;
     private Bundle bundle;
 
-    public AbstractInvocationContext(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachments attachments) {
+    public AbstractInvocationContext(BundleContext systemContext, Bundle bundle, VirtualFile root, Attachable attachments) {
         if (systemContext == null)
             throw MESSAGES.illegalArgumentNull("context");
         if (bundle == null)

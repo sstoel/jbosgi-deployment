@@ -42,7 +42,7 @@
  */
 package org.jboss.osgi.deployment.interceptor;
 
-import org.jboss.osgi.spi.Attachments;
+import org.jboss.osgi.spi.Attachable;
 import org.jboss.osgi.vfs.VirtualFile;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -53,7 +53,7 @@ import org.osgi.framework.BundleContext;
  * @author thomas.diesler@jboss.com
  * @since 24-Oct-2009
  */
-public interface InvocationContext extends Attachments {
+public interface InvocationContext extends Attachable {
     /**
      * Get the system bundle context
      */
