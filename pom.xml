@@ -25,14 +25,14 @@
     <artifactId>jbosgi-deployment</artifactId>
     <packaging>jar</packaging>
 
-    <version>3.0.1.Final-SNAPSHOT</version>
+    <version>3.0.1.Final</version>
 
     <!-- Source Control -->
     <scm>
         <connection>scm:git:git://github.com/jbosgi/jbosgi-deployment.git</connection>
         <developerConnection>scm:git:git@github.com:jbosgi/jbosgi-deployment.git</developerConnection>
         <url>http://github.com/jbosgi/jbosgi-deployment</url>
-        <tag>HEAD</tag>
+        <tag>3.0.1.Final</tag>
     </scm>
 
     <!-- Properties -->
