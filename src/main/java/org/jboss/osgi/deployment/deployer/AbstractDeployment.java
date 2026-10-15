@@ -45,6 +45,7 @@ package org.jboss.osgi.deployment.deployer;
 import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.jboss.osgi.spi.AttachableSupport;
 import org.osgi.framework.Version;
@@ -133,7 +134,7 @@ public abstract class AbstractDeployment extends AttachableSupport implements De
 
         AbstractDeployment other = (AbstractDeployment) obj;
         boolean matchLocation = location.equals(other.location);
-        boolean matchName = symbolicName == other.symbolicName || symbolicName.equals(other.symbolicName);
+        boolean matchName = Objects.equals(symbolicName, other.symbolicName);
         boolean matchVersion = getVersion().equals(other.getVersion());
         return matchLocation && matchName && matchVersion;
     }

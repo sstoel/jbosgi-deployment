@@ -48,7 +48,7 @@ import static org.jboss.osgi.deployment.DeploymentMessages.MESSAGES;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -116,48 +116,11 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
         LOGGER.debugf("Add interceptor: %s", new InterceptorWrapper(interceptor));
 
         synchronized (interceptorChain) {
-            Set<LifecycleInterceptor> unsortedSet = new HashSet<LifecycleInterceptor>();
-            unsortedSet.addAll(interceptorChain);
+            // The current chain and the new interceptor, an interceptor that is already in the chain is not added twice
+            Set<LifecycleInterceptor> unsortedSet = new LinkedHashSet<LifecycleInterceptor>(interceptorChain);
             unsortedSet.add(interceptor);
 
-            List<LifecycleInterceptor> sortedList = new ArrayList<LifecycleInterceptor>();
-
-            // Add interceptors with no inputs first
-            Iterator<LifecycleInterceptor> itUnsorted = unsortedSet.iterator();
-            while (itUnsorted.hasNext()) {
-                LifecycleInterceptor aux = itUnsorted.next();
-                if (aux.getInput() == null) {
-                    addWithRelativeOrder(sortedList, aux);
-                    itUnsorted.remove();
-                }
-            }
-
-            // Get the set of provided outputs
-            Set<AttachmentKey<?>> providedOutputs = new HashSet<AttachmentKey<?>>();
-            for (LifecycleInterceptor aux : sortedList) {
-                Set<AttachmentKey<?>> auxOutput = aux.getOutput();
-                if (auxOutput != null)
-                    providedOutputs.addAll(auxOutput);
-            }
-
-            // Add interceptors with sattisfied inputs
-            itUnsorted = unsortedSet.iterator();
-            while (itUnsorted.hasNext()) {
-                LifecycleInterceptor aux = itUnsorted.next();
-                Set<AttachmentKey<?>> input = aux.getInput();
-                if (input == null)
-                    throw MESSAGES.illegalStateInterceptorWithNoInputsAdded();
-
-                if (providedOutputs.containsAll(input)) {
-                    addWithRelativeOrder(sortedList, aux);
-                    itUnsorted.remove();
-                }
-            }
-
-            // Add the remaining interceptors
-            for (LifecycleInterceptor aux : unsortedSet) {
-                addWithRelativeOrder(sortedList, aux);
-            }
+            List<LifecycleInterceptor> sortedList = sortInterceptors(new ArrayList<LifecycleInterceptor>(unsortedSet));
 
             // Log the interceptor order
             if (LOGGER.isTraceEnabled()) {
@@ -175,30 +138,38 @@ public abstract class AbstractLifecycleInterceptorService implements LifecycleIn
         }
     }
 
-    private void addWithRelativeOrder(List<LifecycleInterceptor> sortedList, LifecycleInterceptor interceptor) {
+    /**
+     * Sort the interceptors topologically: an interceptor comes after the interceptors that provide its inputs.
+     *
+     * The next interceptor is the one with the lowest relative order of those whose inputs are provided by the
+     * interceptors before it, and of those with the same relative order the one that comes first in the given list.
+     * Interceptors with inputs that no other interceptor provides come last, in relative order.
+     */
+    private static List<LifecycleInterceptor> sortInterceptors(List<LifecycleInterceptor> unsortedList) {
+        List<LifecycleInterceptor> remaining = new ArrayList<LifecycleInterceptor>(unsortedList);
+        List<LifecycleInterceptor> sortedList = new ArrayList<LifecycleInterceptor>();
         Set<AttachmentKey<?>> providedOutputs = new HashSet<AttachmentKey<?>>();
-        int relOrder = interceptor.getRelativeOrder();
-        Set<AttachmentKey<?>> input = interceptor.getInput();
-
-        for (int i = 0; i < sortedList.size(); i++) {
-            LifecycleInterceptor aux = sortedList.get(i);
-            int auxOrder = aux.getRelativeOrder();
-
-            // Add if all inputs are satisfied and the rel order is less or equal
-            boolean inputsProvided = (input == null || providedOutputs.containsAll(input));
-            if (inputsProvided && relOrder <= auxOrder) {
-                sortedList.add(i, interceptor);
-                return;
+        while (remaining.isEmpty() == false) {
+            LifecycleInterceptor next = null;
+            boolean nextProvided = false;
+            for (LifecycleInterceptor aux : remaining) {
+                Set<AttachmentKey<?>> input = aux.getInput();
+                boolean inputsProvided = (input == null || providedOutputs.containsAll(input));
+                if (next == null || (inputsProvided && nextProvided == false)) {
+                    next = aux;
+                    nextProvided = inputsProvided;
+                } else if (inputsProvided == nextProvided && aux.getRelativeOrder() < next.getRelativeOrder()) {
+                    next = aux;
+                }
             }
+            remaining.remove(next);
+            sortedList.add(next);
 
-            // Add the this interceptor output the list
-            Set<AttachmentKey<?>> auxOutput = aux.getOutput();
-            if (auxOutput != null)
-                providedOutputs.addAll(auxOutput);
+            Set<AttachmentKey<?>> output = next.getOutput();
+            if (output != null)
+                providedOutputs.addAll(output);
         }
-
-        // If not added yet, add at end
-        sortedList.add(interceptor);
+        return sortedList;
     }
 
     /**
